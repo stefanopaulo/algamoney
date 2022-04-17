@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,17 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.stefano.api.awm.backend.event.ResourceCreatedEvent;
 import com.stefano.api.awm.backend.model.Person;
 import com.stefano.api.awm.backend.repository.PersonRepository;
+import com.stefano.api.awm.backend.service.PersonService;
 
 @RestController
 @RequestMapping("/persons")
 public class PersonResources {
 	
+	private final PersonService personService;
 	private final PersonRepository personRepository;
 	private final ApplicationEventPublisher publisher;
 
-	public PersonResources(PersonRepository personRepository, ApplicationEventPublisher publisher) {
+	public PersonResources(PersonRepository personRepository, ApplicationEventPublisher publisher, PersonService personService) {
 		this.personRepository = personRepository;
 		this.publisher = publisher;
+		this.personService = personService;
 	}
 	
 	@GetMapping
@@ -51,13 +55,20 @@ public class PersonResources {
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Person>> findById(@PathVariable Long id) {
 		Optional<Person> person = personRepository.findById(id);
-		return !person.isEmpty() ? ResponseEntity.ok(person) : ResponseEntity.notFound().build();
+		return person.isPresent() ? ResponseEntity.ok(person) : ResponseEntity.notFound().build();
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remove(@PathVariable Long id) {
 		personRepository.deleteById(id);
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Person> update(@PathVariable Long id, @Valid @RequestBody Person person) {
+		Person savePerson = personService.update(id, person);
+		
+		return ResponseEntity.ok(savePerson);
 	}
 
 }

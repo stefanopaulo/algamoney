@@ -35,8 +35,8 @@ public class PersonService {
 	}
 	
 	private Person findPersonById(Long id) {
-		Person savePerson = personRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
-		return savePerson;
+		return personRepository.findById(id)
+				.orElseThrow(() -> new EmptyResultDataAccessException(1));
 	}
 
 }

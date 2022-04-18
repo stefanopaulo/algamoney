@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,9 +54,9 @@ public class PersonResources {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Person>> findById(@PathVariable Long id) {
-		Optional<Person> person = personRepository.findById(id);
-		return person.isPresent() ? ResponseEntity.ok(person) : ResponseEntity.notFound().build();
+	public ResponseEntity<Person> findById(@PathVariable Long id) {
+		Person person = personRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
+		return ResponseEntity.ok(person);
 	}
 	
 	@DeleteMapping("/{id}")

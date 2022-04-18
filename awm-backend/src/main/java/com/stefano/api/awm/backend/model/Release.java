@@ -48,10 +48,12 @@ public class Release {
 	@Enumerated(EnumType.STRING)
 	private TypeRelease type;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_category")
 	private Category category;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_person")
 	private Person person;

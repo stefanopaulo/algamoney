@@ -1,12 +1,12 @@
 package com.stefano.api.awm.backend.resource;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,9 +47,11 @@ public class CategoryResource {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Category>> findById(@PathVariable Long id) {
-		Optional<Category> category = categoryRepository.findById(id);
-		return !category.isEmpty() ? ResponseEntity.ok(category) : ResponseEntity.notFound().build();
+	public ResponseEntity<Category> findById(@PathVariable Long id) {
+		Category category = categoryRepository.findById(id)
+										.orElseThrow(() -> new EmptyResultDataAccessException(1));
+
+		return ResponseEntity.ok(category);
 	}
 
 }

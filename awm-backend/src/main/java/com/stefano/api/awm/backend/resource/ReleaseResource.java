@@ -25,6 +25,7 @@ import com.stefano.api.awm.backend.event.ResourceCreatedEvent;
 import com.stefano.api.awm.backend.exceptionhandler.AlgamoneyExceptionHandler.Error;
 import com.stefano.api.awm.backend.model.Release;
 import com.stefano.api.awm.backend.repository.ReleaseRepository;
+import com.stefano.api.awm.backend.repository.filter.ReleaseFilter;
 import com.stefano.api.awm.backend.service.ReleaseService;
 import com.stefano.api.awm.backend.service.exception.NonexistentOrInactivePersonException;
 
@@ -45,8 +46,8 @@ public class ReleaseResource {
 	}
 	
 	@GetMapping
-	public List<Release> listAll() {
-		return releaseRepository.findAll();
+	public List<Release> search(ReleaseFilter releaseFilter) {
+		return releaseRepository.filter(releaseFilter);
 	}
 	
 	@GetMapping("/{id}")

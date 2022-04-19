@@ -1,5 +1,6 @@
 package com.stefano.api.awm.backend.service;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.stefano.api.awm.backend.model.Person;
@@ -28,6 +29,11 @@ public class ReleaseService {
 		}
 		
 		return releaseRepository.save(release);
+	}
+
+	public void delete(Long id) {
+		Release release = releaseRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
+		releaseRepository.delete(release);
 	}
 
 }

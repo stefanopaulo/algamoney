@@ -1,5 +1,6 @@
 package com.stefano.api.awm.backend.event;
 
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.ApplicationEvent;

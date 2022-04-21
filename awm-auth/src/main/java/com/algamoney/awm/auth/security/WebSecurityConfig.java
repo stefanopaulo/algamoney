@@ -2,6 +2,7 @@ package com.algamoney.awm.auth.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,18 +16,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication()
-			.withUser("angular")
-				.password(passwordEncoder().encode("@ngul@r0"))
-				.roles("ROLE")
-			.and()
-			.withUser("mobile")
-				.password(passwordEncoder().encode("m0b1l3"))
-				.roles("ROLE");
+			.withUser("admin")
+				.password(passwordEncoder().encode("admin"))
+				.roles("ADMIN");
 	}
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
 	}
 
 }

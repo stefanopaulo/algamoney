@@ -35,7 +35,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 					.secret("m0b1l3#")
 					.authorizedGrantTypes("password")
 					.scopes("write", "read")
-					.accessTokenValiditySeconds(1800);
+					.accessTokenValiditySeconds(1800)
+			.and()
+				.withClient("checktoken")
+					.secret("check123");
 	}
 	
 	@Override
